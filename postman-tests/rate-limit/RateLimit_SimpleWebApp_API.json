@@ -1,0 +1,91 @@
+{
+  "info": {
+    "_postman_id": "8ec974d5-2a73-4aed-a7d5-aefa01516e12",
+    "name": "Iteration SimpleWebApp",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43140997",
+    "_collection_link": "https://go.postman.co/collection/43140997-8ec974d5-2a73-4aed-a7d5-aefa01516e12?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Exceeding Failed Login Attempts",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Response on the third iteration\", function () {",
+              "    pm.variables.set(\"currentIteration\", pm.info.iteration);",
+              "    console.log(\"currentIteration\", pm.variables.get(\"currentIteration\"));",
+              "    if(pm.variables.get(\"currentIteration\") === \"2\"){",
+              "        pm.response.to.have.status(429);",
+              "        console.log(\"inside if\", pm.variables.get(\"currentIteration\"));",
+              "    }else {",
+              "        pm.response.to.have.status(401);",
+              "        console.log(\"inside else\", pm.variables.get(\"currentIteration\"));",
+              "    }",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"user@test.com\",\n    \"password\": \"UserP3!\"\n    \n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5001/api"
+    }
+  ]
+}
