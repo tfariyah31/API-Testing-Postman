@@ -134,7 +134,7 @@ jobs:
 
 ## Related
 
-- 📄 [Main API Test Suite README](../,,/README.md) — Full functional, security, and performance coverage
+- 📄 [Main API Test Suite README](../../README.md) — Full functional, security, and performance coverage
 - 📁 `postman-tests/SimpleWebApp_API.json` — Primary collection (60+ test cases)
 
 ---
