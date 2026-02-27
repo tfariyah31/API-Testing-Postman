@@ -60,7 +60,7 @@ jobs:
         run: npm install -g newman newman-reporter-htmlextra
 
       - name: Show environment file
-        run: cat postman-tests/QA_environment.json
+        run: cat postman-tests/full-suite/QA_environment.json
 
       - name: Create newman output folder
         run: mkdir -p postman-tests/full-suite/newman
