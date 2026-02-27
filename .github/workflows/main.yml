@@ -1,7 +1,7 @@
 name: Run Postman API Tests
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   test:
@@ -13,8 +13,10 @@ jobs:
         ports:
           - '27017:27017'
         options: >-
-          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'" 
-          --health-interval 10s --health-timeout 5s --health-retries 5
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout code
@@ -29,8 +31,8 @@ jobs:
         working-directory: ./backend
         run: |
           npm install
-          echo "PORT=5000" >> .env
-          echo "MONGO_URI=mongodb://localhost:27017/mywebapp" >> .env
+          echo "PORT=5001" >> .env
+          echo "MONGO_URI=mongodb://localhost:27017/simplewebapp" >> .env
           echo "JWT_SECRET=yourtestsecret" >> .env
 
       - name: Start backend server
@@ -40,31 +42,36 @@ jobs:
           sleep 5
           cat backend.log
 
-      - name: ⏳ Install wait-on
+      - name: Install wait-on
         run: npm install -g wait-on
+
       - name: Wait for backend to be ready
         run: |
-          npx wait-on tcp:5000
-          curl -v http://localhost:5000 || true
-      
+          npx wait-on tcp:5001
+          curl -v http://localhost:5001 || true
+
       - name: Seed database
         working-directory: ./backend
-        run: node seedUser.js
+        run: |
+          node seedUser.js
+          node seedProducts.js
 
-      - name: Install Newman
-        run: npm install -g newman
-        
+      - name: Install Newman and HTMLExtra reporter
+        run: npm install -g newman newman-reporter-htmlextra
+
       - name: Show environment file
-        run: cat postman/SimpleWebApp.postman_environment.json
+        run: cat postman-tests/QA_environment.json
 
       - name: Run Postman API Tests
         run: |
-          newman run postman/SimpleWebApp-API-Testing.postman_collection.json \
-            -r cli,html \
-            --reporter-html-export TestResults/newman-report.html
+          newman run postman-tests/SimpleWebApp_API.json \
+            -e postman-tests/QA_environment.json \
+            -r cli,htmlextra \
+            --reporter-htmlextra-export newman/newman-report.html
 
       - name: Upload Newman Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: newman-report
-          path: TestResults/newman-report.html
+          path: newman/newman-report.html
