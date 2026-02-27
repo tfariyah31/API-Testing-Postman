@@ -11,13 +11,17 @@ Postman-API-Testing-Demo/
 ├── backend/
 │   └── Node.js backend app
 ├── postman-tests/
-│   ├── SimpleWebApp_API.json
-│   ├── IterationSimpleWebApp_API.json
-│   ├── QA_environment.json
-│   └── README.md 
-├── newman/
-│   └── SimpleWebApp API.html
-│   └── Iteration SimpleWebApp.html
+│   └── full-suite/
+│       └── SimpleWebApp_API.json
+│       └── QA_environment.json
+│       └── README.md
+│       └── newman/
+│           └── SimpleWebApp API.html
+│   └── rate-limit/
+│       └── RateLimit_SimpleWebApp_API.json
+│       └── README.md
+│       └── newman/
+│           └── Iteration SimpleWebApp.html    
 ├── .github/
 │   └── workflows/
 │       └── api-tests.yml 
