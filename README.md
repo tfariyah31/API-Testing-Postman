@@ -85,26 +85,79 @@ The backend will be available at `http://localhost:5001`.
 - Newman HTML reports
 - CI workflow to run tests on every push
 
-### ✅ Prerequisites
-Install Newman globally if you haven’t:
+### Prerequisites
+- [Postman](https://www.postman.com/downloads/) (v10+) **or** [Newman](https://github.com/postmanlabs/newman) (CLI)
+- Your backend running at `http://localhost:5001`
+- Seed database with initial data, run:
+```bash
+node seedUser.js
+node seeProducts.js
+```
+
+### Import the Collection
+
+1. Open Postman → **Import**
+2. Select `SimpleWebApp_API.json`
+3. The collection and all variables will be loaded automatically
+
+
+### Configure Variables
+
+Set these in your Postman **Environment** before running:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `base_url` | API base URL | `http://localhost:5001/api` |
+| `blocked_user` | Email of a pre-blocked account (for LG-005) | `blocked@example.com` |
+| `blocked_user_pass` | Password for the blocked account | `Password123!` |
+
+### Run Order
+
+For full coverage, run the folders **in this order** so that collection variables are populated sequentially:
+
+```
+1. Authentication > User Registration
+2. Authentication > Login
+3. Products - Protected Route
+4. Logout
+5. Performance Tests
+6. Security Tests
+7. End-to-End Flows
+```
+
+> **Tip:** Use Postman's **Collection Runner** and enable "Save responses" to capture a full test report.
+
+
+## Collection Variables
+
+These are auto-managed by test scripts — you do not need to set them manually:
+
+| Variable | Set By | Used By |
+|----------|--------|---------|
+| `reg_email` | REG-001 pre-request | LG-001, LG-002, E2E flows |
+| `reg_password` | REG-001 pre-request | LG-001, LG-002 |
+| `reg_saved_email` | REG-001 test script | REG-002 (duplicate check) |
+| `access_token` | LG-001 test script | All protected routes |
+| `refresh_token` | LG-001 test script | LG-010 |
+| `product_id` | PR-002 test script | PR-003, PR-004, PR-005 |
+| `tampered_token` | PR-009 pre-request | PR-009 |
+| `e2e_token` | FLOW-02 test script | FLOW-03, FLOW-04, FLOW-05 |
+
+---
+
+## Newman CI/CD Integration
+
+Run the full suite headlessly in any CI pipeline:
 
 ```bash
-npm install -g newman newman-reporter-htmlextra
-```
-### Run the Postman collection:
-Main API test suite:
-```bash
-newman run postman-tests/SimpleWebApp_API.json \
-  -e postman-tests/QA_environment.json \
-  -r cli,htmlextra
-```
-Rate limit / iteration tests (runs the collection 3 times):
+# Install Newman
+npm install -g newman
 
-```bash
-newman run postman-tests/IterationSimpleWebApp_API.json \
-  -e postman-tests/QA_environment.json \
-  -n 3 \
-  -r cli,htmlextra
+# Run collection
+newman run SimpleWebApp_API.json \
+  --env-var "base_url=http://localhost:3000" \
+  --reporters cli,json \
+  --reporter-json-export results.json
 ```
 
 HTMLExtra reports are saved to the ```newman/``` folder by default. To specify a custom output path, append ```--reporter-htmlextra-export newman/my-report.html``` to either command.
@@ -154,13 +207,10 @@ You can find the workflow file here:
 <img src="Newman_Report.png" width="600" height="350">
 
 
+## Author
+**Tasnim Fariyah**
 
-### Author
-Tasnim Fariyah
-
-[Github](https://github.com/tfariyah31)
-
-[LinkedIn](https://www.linkedin.com/in/tasnim-fariyah/)
-
+[![GitHub](https://img.shields.io/badge/GitHub-tfariyah31-181717?logo=github)](https://github.com/tfariyah31)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-tasnim--fariyah-0A66C2?logo=linkedin)](https://www.linkedin.com/in/tasnim-fariyah/)
 ---
 
