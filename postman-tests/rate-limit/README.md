@@ -14,7 +14,6 @@
 - [How the Iteration Logic Works](#how-the-iteration-logic-works)
 - [Postman Setup](#postman-setup)
 - [Newman Integration](#newman-integration)
-- [CI/CD with GitHub Actions](#cicd-with-github-actions)
 
 ---
 
