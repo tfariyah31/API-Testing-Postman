@@ -98,6 +98,12 @@ node seedUser.js
 node seeProducts.js
 ```
 
+## 📁 Collections
+| Collection | Description |
+|------------|-------------|
+| Full Suite | Functional, security & performance tests. - View Details Below |
+| Rate Limit | Brute-force & iteration tests - [View Details Here](postman-tests/rate-limit/README.md) |
+
 ### Import the Collection
 
 1. Open Postman → **Import**
